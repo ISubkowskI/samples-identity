@@ -1,7 +1,9 @@
 using Ae.Sample.Identity.Data;
+using Ae.Sample.Identity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace Ae.Sample.Identity.Pages.Account
 {
@@ -16,7 +18,19 @@ namespace Ae.Sample.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await HttpContext.SignOutAsync(ConstsWebApp.CookieName);
+            if (HttpContext.User?.Identity?.IsAuthenticated == true)
+            {
+                _logger.LogInformation("<-- User {UserName} is logging out. {Page} {MethodName}()",
+                    HttpContext.User.Identity.Name, nameof(LogoutModel), nameof(OnPostAsync));
+
+                await HttpContext.SignOutAsync(ConstsWebApp.CookieName);
+            }
+            else
+            {
+                _logger.LogInformation("No authenticated user to log out. {Page} {MethodName}()",
+                    nameof(LogoutModel), nameof(OnPostAsync));
+            }
+
             return RedirectToPage("/Index");
         }
     }

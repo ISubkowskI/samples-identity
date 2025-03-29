@@ -13,7 +13,6 @@ namespace Ae.Sample.Identity.Pages.Account
         public Credential Credential { get; set; } = new Credential();
 
         private readonly ILogger<LoginModel> _logger;
-
         private readonly IAppIdentityService _appIdentityService;
 
         public LoginModel(ILogger<LoginModel> logger, IAppIdentityService appIdentityService)
@@ -33,15 +32,18 @@ namespace Ae.Sample.Identity.Pages.Account
                 return Page();
             }
 
-            if (await _appIdentityService.TryVerifyCredentialAsync(Credential.Username, Credential.Password, out var principal).ConfigureAwait(false))
+            var (isVerified, principal) = await _appIdentityService.TryVerifyCredentialAsync(Credential.Username, Credential.Password).ConfigureAwait(false);
+            if (isVerified)
             {
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = Credential.RememberMe,
                 };
 
-                await HttpContext.SignInAsync(ConstsWebApp.CookieName, principal!, authProperties);
+                _logger.LogInformation("<-- User {UserName} is logging in. {Page} {MethodName}().",
+                    Credential.Username, nameof(LoginModel), nameof(OnPost));
 
+                await HttpContext.SignInAsync(ConstsWebApp.CookieName, principal!, authProperties);
                 return RedirectToPage("/Index");
             }
 
