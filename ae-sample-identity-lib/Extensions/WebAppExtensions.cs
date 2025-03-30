@@ -23,19 +23,19 @@ namespace Ae.Sample.Identity.Extensions
 
             services.AddAuthorizationCore(options =>
             {
-                options.AddPolicy("AdminOnly", policy =>
+                options.AddPolicy(AppPolicyNames.AdminOnly, policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("Admin");
                 });
 
-                options.AddPolicy("HRManagerOnly", policy => policy
+                options.AddPolicy(AppPolicyNames.HRManagerOnly, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireClaim("Department", "HR")
                     .RequireClaim("Manager")
-                    .Requirements.Add(new HrManagerProbationRequirement(3)));
+                    .Requirements.Add(new HrManagerProbationRequirement(probationMonths:3)));
 
-                options.AddPolicy("MustBelongToHRDepartment", policy =>
+                options.AddPolicy(AppPolicyNames.MustBelongToHRDepartment, policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("Department", "HR");

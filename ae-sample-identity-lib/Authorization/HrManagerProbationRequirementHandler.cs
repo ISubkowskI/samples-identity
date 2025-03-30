@@ -6,14 +6,14 @@ namespace Ae.Sample.Identity.Authorization
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HrManagerProbationRequirement requirement)
         {
-            if (!context.User.HasClaim(c => c.Type == "EmploymentDate"))
+            if (!context.User.HasClaim(c => c.Type == AppClaimTypes.EmploymentDate))
             {
                 return Task.CompletedTask;
             }
 
-            if (DateTime.TryParse(context.User.FindFirst(c => c.Type == "EmploymentDate")?.Value, out DateTime employmentDate))
+            if (DateTimeOffset.TryParse(context.User.FindFirst(c => c.Type == AppClaimTypes.EmploymentDate)?.Value, out DateTimeOffset employmentDate))
             {
-                var period = DateTime.Now - employmentDate;
+                var period = DateTimeOffset.Now - employmentDate;
                 if (period.Days > 30 * requirement.ProbationMonths)
                 {
                     context.Succeed(requirement);

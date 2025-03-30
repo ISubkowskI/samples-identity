@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Ae.Sample.Identity.Authorization;
 using Ae.Sample.Identity.Data;
 using Microsoft.Extensions.Logging;
 
@@ -61,7 +62,7 @@ namespace Ae.Sample.Identity.Services
                             new ("Department", "HR"),
                             new ("Admin", "true"),
                             new ("Manager", "true"),
-                            new ("EmploymentDate", "2024-03-01"),
+                            new (AppClaimTypes.EmploymentDate, "2024-03-01"),
                         };
                     var identity = new ClaimsIdentity(claims, ConstsWebApp.CookieName);
 

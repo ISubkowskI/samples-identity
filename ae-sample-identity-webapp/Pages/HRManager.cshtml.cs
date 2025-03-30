@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ae.Sample.Identity.Authorization;
 
 namespace Ae.Sample.Identity.Pages
 {
-    [Authorize(Policy = "HRManagerOnly")]
+    [Authorize(Policy = AppPolicyNames.HRManagerOnly)]
     public class HRManagerModel : PageModel
     {
         private readonly ILogger<HRManagerModel> _logger;
