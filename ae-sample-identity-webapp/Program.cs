@@ -16,7 +16,9 @@ builder.Services.AddWebAppAuthentication(ConstsWebApp.CookieName, cookieOptions 
     cookieOptions.ExpireTimeSpan = TimeSpan.FromSeconds(ConstsWebApp.CookieExpireTimeSeconds);
 });
 
-builder.Services.AddTransient<IAppIdentityService, AppIdentityService>();
+builder.Services
+    .AddTransient<IAppIdentityService, AppIdentityService>()
+    .AddSingleton<IAccountsService, AccountsService>();
 
 // Add WebApp Policy etc.
 builder.Services.AddWebAppAuthorization();

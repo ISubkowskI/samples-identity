@@ -63,7 +63,6 @@ namespace Ae.Sample.Identity.Unittests.Authorization
         public async Task HandleRequirementAsync_UserHasNotClaimEmploymentDate_Fails()
         {
             // Arrange
-            var employmentDate = DateTimeOffset.Now.AddDays(-15);
             int probationMonths = 3;
 
             var requirement = new HrManagerProbationRequirement(probationMonths);

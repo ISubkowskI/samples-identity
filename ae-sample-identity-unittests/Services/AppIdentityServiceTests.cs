@@ -13,7 +13,9 @@ namespace Ae.Sample.Identity.Unittests.Services
         public AppIdentityServiceTests()
         {
            
-            _service = new AppIdentityService(Mock.Of<ILogger<AppIdentityService>>());
+            _service = new AppIdentityService(
+                Mock.Of<ILogger<AppIdentityService>>(),
+                new AccountsService(Mock.Of<ILogger<AccountsService>>()));
         }
 
         [Fact]

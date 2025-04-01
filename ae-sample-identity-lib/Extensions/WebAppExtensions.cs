@@ -26,19 +26,19 @@ namespace Ae.Sample.Identity.Extensions
                 options.AddPolicy(AppPolicyNames.AdminOnly, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Admin");
+                    policy.RequireClaim(AppClaimTypes.Admin);
                 });
 
                 options.AddPolicy(AppPolicyNames.HRManagerOnly, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireClaim("Department", "HR")
-                    .RequireClaim("Manager")
+                    .RequireClaim(AppClaimTypes.Department, "HR")
+                    .RequireClaim(AppClaimTypes.Manager)
                     .Requirements.Add(new HrManagerProbationRequirement(probationMonths:3)));
 
                 options.AddPolicy(AppPolicyNames.MustBelongToHRDepartment, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Department", "HR");
+                    policy.RequireClaim(AppClaimTypes.Department, "HR");
                 });
             });
 
