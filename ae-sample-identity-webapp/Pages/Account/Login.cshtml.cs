@@ -32,7 +32,7 @@ namespace Ae.Sample.Identity.Pages.Account
                 return Page();
             }
 
-            var (isVerified, principal) = await _appIdentityService.TryVerifyCredentialAsync(Credential.Username, Credential.Password).ConfigureAwait(false);
+            var (isVerified, principal) = await _appIdentityService.TryVerifyCredentialAsync(Credential.Email, Credential.Password).ConfigureAwait(false);
             if (isVerified)
             {
                 var authProperties = new AuthenticationProperties
@@ -40,8 +40,8 @@ namespace Ae.Sample.Identity.Pages.Account
                     IsPersistent = Credential.RememberMe,
                 };
 
-                _logger.LogInformation("<-- User {UserName} is logging in. {Page} {MethodName}().",
-                    Credential.Username, nameof(LoginModel), nameof(OnPost));
+                _logger.LogInformation("<-- User {Email} is logging in. {Page} {MethodName}().",
+                    Credential.Email, nameof(LoginModel), nameof(OnPost));
 
                 await HttpContext.SignInAsync(ConstsWebApp.CookieName, principal!, authProperties);
                 return RedirectToPage("/Index");

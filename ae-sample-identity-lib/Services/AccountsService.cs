@@ -43,18 +43,18 @@ namespace Ae.Sample.Identity.Services
         /// <summary>
         /// Attempts to retrieve an account identity by username
         /// </summary>
-        /// <param name="userName">The username (email) to look up</param>
+        /// <param name="email">The username (email) to look up</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>
         /// A tuple containing:
         /// - success: true if account was found, false otherwise
         /// - accountIdentity: the found account or null if not found
         /// </returns>
-        public async Task<(bool success, AccountIdentity? accountIdentity)> TryGetAccountIdentityAsync(string userName, CancellationToken ct = default)
+        public async Task<(bool success, AccountIdentity? accountIdentity)> TryGetAccountIdentityAsync(string email, CancellationToken ct = default)
         {
-            if (!_accountsStorage.TryGetValue(userName, out var accountIdentity))
+            if (!_accountsStorage.TryGetValue(email, out var accountIdentity))
             {
-                _logger.LogWarning("User not found '{UserName}'.", userName);
+                _logger.LogWarning("User not found '{UserName}'.", email);
                 return (false, default);
             }
             return await Task.FromResult((true, accountIdentity));

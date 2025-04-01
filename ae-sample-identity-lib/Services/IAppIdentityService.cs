@@ -10,7 +10,7 @@ namespace Ae.Sample.Identity.Services
         /// <summary>
         /// Attempts to verify user credentials and returns the associated claims principal if successful.
         /// </summary>
-        /// <param name="userName">The username to verify.</param>
+        /// <param name="email">The username to verify.</param>
         /// <param name="password">The password to verify.</param>
         /// <param name="ct">Optional cancellation token to cancel the operation.</param>
         /// <returns>
@@ -18,6 +18,6 @@ namespace Ae.Sample.Identity.Services
         /// - isVerified: Boolean indicating if the credentials were valid
         /// - principal: The ClaimsPrincipal if verification was successful, null otherwise
         /// </returns>
-        Task<(bool isVerified, ClaimsPrincipal? principal)> TryVerifyCredentialAsync(string userName, string password, CancellationToken ct = default);
+        Task<(bool isVerified, ClaimsPrincipal? principal)> TryVerifyCredentialAsync(string email, string password, CancellationToken ct = default);
     }
 }

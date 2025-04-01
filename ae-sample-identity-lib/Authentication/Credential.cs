@@ -5,15 +5,19 @@ namespace Ae.Sample.Identity.Authentication
     public class Credential
     {
         [Required]
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
-        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-        [Display(Name = "Remember Me")]
+        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        [Display(Name = "Display name")]
+        [DataType(DataType.Text)]
+        public string DisplayName { get; set; } = string.Empty;
     }
 }
