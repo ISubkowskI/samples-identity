@@ -71,13 +71,14 @@ namespace Ae.Sample.Identity.Services
                 // Creating the security context
                 var claims = new List<Claim>
                 {
-                    new (ClaimTypes.Name, email),
-                    new (ClaimTypes.Email, email),
+                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
+                    new (ClaimTypes.NameIdentifier, accountIdentity.EmailAddress),
+                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
                     new (ClaimTypes.Role, "Demo"),
                     new (AppClaimTypes.Department, "HR"),
                     new (AppClaimTypes.Admin, "true"),
                     new (AppClaimTypes.Manager, "true"),
-                    new (AppClaimTypes.EmploymentDate, "2024-03-01"),
+                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
                 };
                 var identity = new ClaimsIdentity(claims, ConstsWebApp.CookieName);
 

@@ -26,18 +26,37 @@ namespace Ae.Sample.Identity.Services
         {
             _logger = logger;
 
-            // Create and initialize demo account with hashed password
-            AccountIdentity account = new()
-            {
-                Name = "info@softaren.com",
-                EmailAddress = "info@softaren.com",
-                Description = "Demo User",
-            };
-            account.PasswordHash = new PasswordHasher<AccountIdentity>().HashPassword(account, "Demo");
-
             // Initialize thread-safe storage and add demo account
             _accountsStorage = new ConcurrentDictionary<string, AccountIdentity>();
-            _accountsStorage.TryAdd(account.EmailAddress, account);
+            InitializeStorage(_accountsStorage);
+        }
+
+        private void InitializeStorage(ConcurrentDictionary<string, AccountIdentity> storage)
+        {
+            // Create and initialize demo account with hashed password
+            AccountIdentity accountInfo = new()
+            {
+                EmailAddress = "info@softaren.com",
+                Guid = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.Now,
+                EmploymentDate = DateTimeOffset.Parse("2024-03-01"),
+                DisplayName = "Info",
+                Description = "Demo User Info",
+            };
+            accountInfo.PasswordHash = new PasswordHasher<AccountIdentity>().HashPassword(accountInfo, "Demo");
+            storage.TryAdd(accountInfo.EmailAddress, accountInfo);
+
+            AccountIdentity accountNotifications = new()
+            {
+                EmailAddress = "notifications@softaren.com",
+                Guid = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.Now,
+                EmploymentDate = DateTimeOffset.Now,
+                DisplayName = "Notifications",
+                Description = "Demo User Notifications",
+            };
+            accountNotifications.PasswordHash = new PasswordHasher<AccountIdentity>().HashPassword(accountNotifications, "Demo");
+            storage.TryAdd(accountNotifications.EmailAddress, accountNotifications);
         }
 
         /// <summary>
