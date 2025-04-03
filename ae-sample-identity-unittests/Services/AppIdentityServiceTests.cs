@@ -68,7 +68,7 @@ namespace Ae.Sample.Identity.Unittests.Services
         [InlineData("", "password")]
         [InlineData("username", null)]
         [InlineData("username", "")]
-        public async Task TryVerifyCredentialAsync_WithInvalidInput_ReturnsFalse(string username, string password)
+        public async Task TryVerifyCredentialAsync_WithInvalidInput_ReturnsFalse(string? username, string? password)
         {
             // Act
             (bool isVerified, ClaimsPrincipal? principal) = await _service.TryVerifyCredentialAsync(username, password);

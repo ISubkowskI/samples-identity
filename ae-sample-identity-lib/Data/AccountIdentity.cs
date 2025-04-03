@@ -10,7 +10,17 @@
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.MinValue;
 
+        public bool IsLocked { get; set; } = false;
+
         public DateTimeOffset EmploymentDate { get; set; } = DateTimeOffset.MinValue;
+
+        public DateTimeOffset LastLogin { get; set; } = DateTimeOffset.MinValue;
+
+        public DateTimeOffset LastPasswordChange { get; set; } = DateTimeOffset.MinValue;
+
+        public DateTimeOffset PasswordExpiredOn { get; set; } = DateTimeOffset.MaxValue;
+
+        public DateTimeOffset EmailVerifiedOn { get; set; } = DateTimeOffset.MinValue;
 
         public string DisplayName { get; set; } = string.Empty;
 

@@ -62,6 +62,13 @@ namespace Ae.Sample.Identity.Services
                     return (false, default);
                 }
 
+                // Check if the account is locked
+                if (accountIdentity!.IsLocked)
+                {
+                    _logger.LogWarning("Account is locked '{Email}'.", email);
+                    return (false, default);
+                }
+
                 if (new PasswordHasher<AccountIdentity>().VerifyHashedPassword(accountIdentity!, accountIdentity!.PasswordHash, password) == PasswordVerificationResult.Failed)
                 {
                     _logger.LogWarning("NOT VERIFIED '{Email}'.", email);
