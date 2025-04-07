@@ -41,4 +41,4 @@ Follow these steps to build and run the application using Docker:
     * **Email:** `info@softaren.com`
         **Password:** `Demo`
     * **Email:** `notifications@softaren.com`
-        **Password:** `Demo`inerization:
+        **Password:** `Demo`
