@@ -4,6 +4,7 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
+      "launchUrl": "https://localhost:7011/apps/sample-identity-webapp",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7011;http://localhost:5296",
       "environmentVariables": {
@@ -13,6 +14,7 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
+      "launchUrl": "https://localhost:5296/apps/sample-identity-webapp",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5296",
       "environmentVariables": {

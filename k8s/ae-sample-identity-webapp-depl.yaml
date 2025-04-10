@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: softaren-poc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ae-sample-identity-webapp-depl
+  namespace: softaren-poc
+spec:
+  selector:
+    matchLabels:
+      app: sample-identity-webapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sample-identity-webapp
+    spec:
+      containers:
+        - name: sample-identity-webapp
+          image: igorsubkowski/ae-sample-identity-webapp:v1.0.0
+          ports:
+            - name: http-web-svc
+              containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ae-sample-identity-webapp-clusterip-svc
+  namespace: softaren-poc
+spec:
+  type: ClusterIP
+  selector:
+    app: sample-identity-webapp
+  ports:
+    - name: sample-identity-webapp
+      protocol: TCP
+      port: 80
+      targetPort: http-web-svc
+  
