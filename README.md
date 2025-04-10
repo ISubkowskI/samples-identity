@@ -6,15 +6,12 @@ A collection of .NET C# projects demonstrating various identity concepts and imp
 
 This project provides a sample web application demonstrating identity features.
 
-<<<<<<< HEAD
-=======
 ### Prerequisites
 Ensure the following tools are installed and configured before proceeding:
 - Docker and Docker Desktop
 - Kubernetes enabled in Docker Desktop
 - `kubectl` command-line tool
 
->>>>>>> develop
 ### Docker
 
 The project includes a Dockerfile for easy containerization:
@@ -29,30 +26,6 @@ Follow these steps to build and run the application using Docker:
 1.  **Build the Docker image:**
     Open your terminal in the same directory as `ae-sample-identity-webapp.Dockerfile` and run:
     ```bash
-<<<<<<< HEAD
-    docker build -t aesamples/ae-sample-identity-webapp -f ae-sample-identity-webapp.Dockerfile .
-    ```
-
-2.  **Run the Docker container:**
-    * To run interactively (logs shown in the terminal, container removed on stop):
-        ```bash
-        docker run -it --rm -p 8000:8080 --name ae-sample-identity-webapp aesamples/ae-sample-identity-webapp
-        ```
-    * To run in detached mode (runs in the background):
-        ```bash
-        docker run -d -p 8000:8080 --name ae-sample-identity-webapp aesamples/ae-sample-identity-webapp
-        ```
-
-3.  **Access the application:**
-    Open your web browser and navigate to `http://localhost:8000`.
-
-4.  **Login Credentials:**
-    Use the following credentials to log in:
-    * **Email:** `info@softaren.com`
-        **Password:** `Demo`
-    * **Email:** `notifications@softaren.com`
-        **Password:** `Demo`
-=======
     docker build -t aesamples/ae-sample-identity-webapp:v1.0.0 -f ae-sample-identity-webapp.Dockerfile .
     ```
 2.  **Run the Docker container:**
@@ -118,4 +91,3 @@ The solution includes a k8s folder with *.yaml files for deploying the applicati
         ```
 4.  **Access the application:**
     Open your web browser and navigate to `http://poc.softaren.com/apps/sample-identity-webapp`.
->>>>>>> develop
