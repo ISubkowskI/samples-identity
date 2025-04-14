@@ -1,11 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Ae.Sample.Identity.Authentication
 {
     /// <summary>
-    /// Represents authentication credentials used for user login
+    /// Represents authentication credentials used for user registration
     /// </summary>
-    public sealed class Credential
+    public sealed class CredentialRegistration
     {
         /// <summary>
         /// Gets or sets the user's email address which serves as their username
@@ -23,9 +28,10 @@ namespace Ae.Sample.Identity.Authentication
         public string Password { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the user wants to persist their login session
+        /// Gets or sets the user's display name shown in the application
         /// </summary>
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        [Display(Name = "Display name")]
+        [DataType(DataType.Text)]
+        public string DisplayName { get; set; } = string.Empty;
     }
 }

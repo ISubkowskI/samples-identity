@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ae.Sample.Identity.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ae.Sample.Identity.Authorization
 {

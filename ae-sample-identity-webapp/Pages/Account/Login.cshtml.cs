@@ -32,8 +32,8 @@ namespace Ae.Sample.Identity.Pages.Account
                 return Page();
             }
 
-            var (isVerified, principal) = await _appIdentityService.TryVerifyCredentialAsync(Credential.Email, Credential.Password).ConfigureAwait(false);
-            if (isVerified)
+            var vcResult = await _appIdentityService.TryVerifyCredentialAsync(Credential.Email, Credential.Password).ConfigureAwait(false);
+            if (vcResult.IsVerified)
             {
                 var authProperties = new AuthenticationProperties
                 {
@@ -43,7 +43,7 @@ namespace Ae.Sample.Identity.Pages.Account
                 _logger.LogInformation("<-- User {Email} is logging in. {Page} {MethodName}().",
                     Credential.Email, nameof(LoginModel), nameof(OnPost));
 
-                await HttpContext.SignInAsync(ConstsWebApp.CookieName, principal!, authProperties);
+                await HttpContext.SignInAsync(ConstsWebApp.CookieName, vcResult.Principal!, authProperties);
                 return RedirectToPage("/Index");
             }
 

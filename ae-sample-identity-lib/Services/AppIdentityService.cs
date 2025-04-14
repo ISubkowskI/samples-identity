@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Ae.Sample.Identity.Authorization;
+using Ae.Sample.Identity.Authentication;
 using Ae.Sample.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -32,8 +32,9 @@ namespace Ae.Sample.Identity.Services
         /// <param name="password">The password to verify.</param>
         /// <param name="ct">Optional cancellation token to cancel the operation.</param>
         /// <returns>
-        /// A tuple containing:
+        /// A VerifyCredentialResult containing:
         /// - bool: Indicates whether the credentials were verified successfully
+        /// - infoMessage: A message providing additional information about the verification result
         /// - ClaimsPrincipal?: The claims principal containing user claims if verification was successful, null otherwise
         /// </returns>
         /// <remarks>
@@ -42,7 +43,7 @@ namespace Ae.Sample.Identity.Services
         /// - Username: info@softaren.com
         /// - Password: Demo
         /// </remarks>
-        public async Task<(bool isVerified, ClaimsPrincipal? principal)> TryVerifyCredentialAsync(string email, string password, CancellationToken ct = default)
+        public async Task<VerifyCredentialResult> TryVerifyCredentialAsync(string email, string password, CancellationToken ct = default)
         {
             _logger.LogDebug("Start {ServiceName} {MethodName}() ...", nameof(AppIdentityService), nameof(TryVerifyCredentialAsync));
 
@@ -51,52 +52,43 @@ namespace Ae.Sample.Identity.Services
                 if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
                 {
                     _logger.LogWarning("Incorrect arguments username or password. '{Email}'. {ServiceName} {MethodName}()", email, nameof(AppIdentityService), nameof(TryVerifyCredentialAsync));
-                    return (false, default);
+                    return new(isVerified: false, infoMessage: "Incorrect arguments username or password.", principal: default);
                 }
 
                 // Verify the credential
-                (bool success, AccountIdentity? accountIdentity) = await _accounts.TryGetAccountIdentityAsync(email, ct);
+                (bool success, AccountIdentity? accountIdentity) = await _accounts.TryGetAccountIdentityByEmailAsync(email, ct);
                 if (!success)
                 {
                     _logger.LogWarning("User not found '{Email}'.", email);
-                    return (false, default);
+                    return new(isVerified: false, infoMessage: $"User not found '{email}'.", principal: default);
                 }
 
                 // Check if the account is locked
                 if (accountIdentity!.IsLocked)
                 {
                     _logger.LogWarning("Account is locked '{Email}'.", email);
-                    return (false, default);
+                    return new(isVerified: false, infoMessage: $"Account is locked '{email}'.", principal: default);
                 }
 
                 if (new PasswordHasher<AccountIdentity>().VerifyHashedPassword(accountIdentity!, accountIdentity!.PasswordHash, password) == PasswordVerificationResult.Failed)
                 {
-                    _logger.LogWarning("NOT VERIFIED '{Email}'.", email);
-                    return (false, default);
+                    _logger.LogWarning("PASSWORD NOT VERIFIED '{Email}'.", email);
+                    return new(isVerified: false, infoMessage: $"The password is incorrect '{email}'.", principal: default);
                 }
 
                 // Creating the security context
-                var claims = new List<Claim>
-                {
-                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
-                    new (ClaimTypes.NameIdentifier, accountIdentity.EmailAddress),
-                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
-                    new (ClaimTypes.Role, "Demo"),
-                    new (AppClaimTypes.Department, "HR"),
-                    new (AppClaimTypes.Admin, "true"),
-                    new (AppClaimTypes.Manager, "true"),
-                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
-                };
+                List<Claim> claims = [.. (await _accounts.GetAccountClaimsByEmailAsync(email, ct))];
+
                 var identity = new ClaimsIdentity(claims, ConstsWebApp.CookieName);
 
                 _logger.LogInformation("Verified '{Email}'.", email);
-                var principal = new ClaimsPrincipal(identity);
-                return await Task.FromResult((true, principal));
+                var claimsPrincipal = new ClaimsPrincipal(identity);
+                return new(isVerified: true, infoMessage: "Ok.", principal: claimsPrincipal);
             }
             catch (Exception exc)
             {
                 _logger.LogError(exc, "{ServiceName} {MethodName}() ", nameof(AppIdentityService), nameof(TryVerifyCredentialAsync));
-                return (false, default);
+                return new(isVerified: false, infoMessage: $"Error '{exc.Message}'.", principal: default);
             }
         }
     }

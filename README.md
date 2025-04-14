@@ -90,4 +90,8 @@ The solution includes a k8s folder with *.yaml files for deploying the applicati
         kubectl apply -f ingress-srv.yaml
         ```
 4.  **Access the application:**
+<<<<<<< HEAD
     Open your web browser and navigate to `http://poc.softaren.com/apps/sample-identity-webapp`.
+=======
+    Open your web browser and navigate to `http://poc.softaren.com/apps/sample-identity-webapp`.
+>>>>>>> develop

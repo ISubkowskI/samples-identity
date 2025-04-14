@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using Ae.Sample.Identity.Data;
+using System.Security.Claims;
+using Ae.Sample.Identity.Authentication;
 
 namespace Ae.Sample.Identity.Services
 {
@@ -31,13 +33,13 @@ namespace Ae.Sample.Identity.Services
             InitializeStorage(_accountsStorage);
         }
 
-        private void InitializeStorage(ConcurrentDictionary<string, AccountIdentity> storage)
+        private static void InitializeStorage(ConcurrentDictionary<string, AccountIdentity> storage)
         {
             // Create and initialize demo account with hashed password
             AccountIdentity accountInfo = new()
             {
+                Id = Guid.NewGuid(),
                 EmailAddress = "info@softaren.com",
-                Guid = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 EmploymentDate = DateTimeOffset.Parse("2024-03-01"),
                 DisplayName = "Info",
@@ -48,8 +50,8 @@ namespace Ae.Sample.Identity.Services
 
             AccountIdentity accountNotifications = new()
             {
+                Id = Guid.NewGuid(),
                 EmailAddress = "notifications@softaren.com",
-                Guid = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 EmploymentDate = DateTimeOffset.Now,
                 DisplayName = "Notifications",
@@ -69,7 +71,7 @@ namespace Ae.Sample.Identity.Services
         /// - success: true if account was found, false otherwise
         /// - accountIdentity: the found account or null if not found
         /// </returns>
-        public async Task<(bool success, AccountIdentity? accountIdentity)> TryGetAccountIdentityAsync(string email, CancellationToken ct = default)
+        public async Task<(bool success, AccountIdentity? accountIdentity)> TryGetAccountIdentityByEmailAsync(string email, CancellationToken ct = default)
         {
             if (!_accountsStorage.TryGetValue(email, out var accountIdentity))
             {
@@ -78,5 +80,89 @@ namespace Ae.Sample.Identity.Services
             }
             return await Task.FromResult((true, accountIdentity));
         }
+
+        /// <summary>
+        /// Retrieves the claims associated with a specific account by email.
+        /// </summary>
+        /// <param name="email">The email address of the account.</param>
+        /// <param name="ct">A cancellation token to observe while waiting for the task to complete.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The task result contains a collection of claims
+        /// associated with the account, or an empty collection if the account is not found.
+        /// </returns>
+        public async Task<IEnumerable<Claim>> GetAccountClaimsByEmailAsync(string email, CancellationToken ct = default)
+        {
+
+            if (!_accountsStorage.TryGetValue(email, out var accountIdentity))
+
+            {
+
+                _logger.LogWarning("User not found '{UserName}'. {MethodName}", email, nameof(GetAccountClaimsByEmailAsync));
+
+                return [];
+
+            }
+
+
+
+            // Create claims based on account identity
+
+            switch (accountIdentity.EmailAddress)
+
+            {
+
+                case "info@softaren.com":
+
+                    { // Info account
+
+                        var claims = new List<Claim>
+                                {
+                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
+                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
+                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
+                                    new (ClaimTypes.Role, "Demo"),
+                                    new (AppClaimTypes.Department, "HR"),
+                                    new (AppClaimTypes.Admin, "true"),
+                                    new (AppClaimTypes.Manager, "true"),
+                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
+                                };
+
+                        return await Task.FromResult(claims);
+
+                    }
+
+
+
+                case "notifications@softaren.com":
+
+                    { // Notifications account
+
+                        var claims = new List<Claim>
+                                {
+                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
+                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
+                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
+                                    new (ClaimTypes.Role, "Demo"),
+                                    new (AppClaimTypes.Department, "HR"),
+                                    //new (AppClaimTypes.Admin, "false"),
+                                    new (AppClaimTypes.Manager, "true"),
+                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
+                                };
+
+                        return await Task.FromResult(claims);
+
+                    }
+
+
+
+                default:
+
+                    return [];
+
+            }
+
+
+
+        }
     }
 }

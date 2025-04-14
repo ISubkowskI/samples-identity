@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using FluentAssertions;
 using Ae.Sample.Identity.Services;
@@ -26,11 +25,11 @@ namespace Ae.Sample.Identity.Unittests.Services
             var password = "Demo";
 
             // Act
-            (bool isVerified, ClaimsPrincipal? principal) = await _service.TryVerifyCredentialAsync(username, password);
+            var vcResult = await _service.TryVerifyCredentialAsync(username, password);
 
             // Assert
-            isVerified.Should().BeTrue();
-            principal.Should().NotBeNull();
+            vcResult.IsVerified.Should().BeTrue();
+            vcResult.Principal.Should().NotBeNull();
         }
 
         [Fact]
@@ -41,11 +40,11 @@ namespace Ae.Sample.Identity.Unittests.Services
             var password = "WrongPassword";
 
             // Act
-            (bool isVerified, ClaimsPrincipal? principal) = await _service.TryVerifyCredentialAsync(username, password);
+            var vcResult = await _service.TryVerifyCredentialAsync(username, password);
 
             // Assert
-            isVerified.Should().BeFalse();
-            principal.Should().BeNull();
+            vcResult.IsVerified.Should().BeFalse();
+            vcResult.Principal.Should().BeNull();
         }
 
         [Fact]
@@ -56,11 +55,11 @@ namespace Ae.Sample.Identity.Unittests.Services
             var password = "Password123!";
 
             // Act
-            (bool isVerified, ClaimsPrincipal? principal) = await _service.TryVerifyCredentialAsync(username, password);
+            var vcResult = await _service.TryVerifyCredentialAsync(username, password);
 
             // Assert
-            isVerified.Should().BeFalse();
-            principal.Should().BeNull();
+            vcResult.IsVerified.Should().BeFalse();
+            vcResult.Principal.Should().BeNull();
         }
 
         [Theory]
@@ -71,11 +70,11 @@ namespace Ae.Sample.Identity.Unittests.Services
         public async Task TryVerifyCredentialAsync_WithInvalidInput_ReturnsFalse(string? username, string? password)
         {
             // Act
-            (bool isVerified, ClaimsPrincipal? principal) = await _service.TryVerifyCredentialAsync(username, password);
+            var vcResult = await _service.TryVerifyCredentialAsync(username, password);
 
             // Assert
-            isVerified.Should().BeFalse();
-            principal.Should().BeNull();
+            vcResult.IsVerified.Should().BeFalse();
+            vcResult.Principal.Should().BeNull();
         }
     }
 }

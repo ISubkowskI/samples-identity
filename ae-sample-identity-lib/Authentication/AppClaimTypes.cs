@@ -1,4 +1,4 @@
-﻿namespace Ae.Sample.Identity.Authorization
+﻿namespace Ae.Sample.Identity.Authentication
 {
     public static class AppClaimTypes
     {

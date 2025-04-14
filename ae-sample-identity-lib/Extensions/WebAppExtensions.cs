@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Ae.Sample.Identity.Authentication;
 using Ae.Sample.Identity.Authorization;
 
 namespace Ae.Sample.Identity.Extensions
@@ -26,7 +27,7 @@ namespace Ae.Sample.Identity.Extensions
                 options.AddPolicy(AppPolicyNames.AdminOnly, policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(AppClaimTypes.Admin);
+                    policy.RequireClaim(AppClaimTypes.Admin, "true");
                 });
 
                 options.AddPolicy(AppPolicyNames.HRManagerOnly, policy => policy

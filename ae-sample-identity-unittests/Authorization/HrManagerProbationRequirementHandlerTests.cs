@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Ae.Sample.Identity.Authorization;
+using Ae.Sample.Identity.Authentication;
 using Ae.Sample.Identity.Data;
 
 namespace Ae.Sample.Identity.Unittests.Authorization
