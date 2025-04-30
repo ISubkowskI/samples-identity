@@ -94,75 +94,31 @@ namespace Ae.Sample.Identity.Services
         {
 
             if (!_accountsStorage.TryGetValue(email, out var accountIdentity))
-
             {
-
                 _logger.LogWarning("User not found '{UserName}'. {MethodName}", email, nameof(GetAccountClaimsByEmailAsync));
-
                 return [];
-
             }
-
-
 
             // Create claims based on account identity
-
             switch (accountIdentity.EmailAddress)
-
             {
-
+                // Info account
                 case "info@softaren.com":
-
-                    { // Info account
-
-                        var claims = new List<Claim>
-                                {
-                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
-                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
-                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
-                                    new (ClaimTypes.Role, "Demo"),
-                                    new (AppClaimTypes.Department, "HR"),
-                                    new (AppClaimTypes.Admin, "true"),
-                                    new (AppClaimTypes.Manager, "true"),
-                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
-                                };
-
+                    {
+                        var claims = new List<Claim>                                {                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),                                    new (ClaimTypes.Role, "Demo"),                                    new (AppClaimTypes.Department, "HR"),                                    new (AppClaimTypes.Admin, "true"),                                    new (AppClaimTypes.Manager, "true"),                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),                                };
                         return await Task.FromResult(claims);
-
                     }
 
-
-
+                // Notifications account
                 case "notifications@softaren.com":
-
-                    { // Notifications account
-
-                        var claims = new List<Claim>
-                                {
-                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
-                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
-                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
-                                    new (ClaimTypes.Role, "Demo"),
-                                    new (AppClaimTypes.Department, "HR"),
-                                    //new (AppClaimTypes.Admin, "false"),
-                                    new (AppClaimTypes.Manager, "true"),
-                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
-                                };
-
+                    {
+                        var claims = new List<Claim>                                {                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),                                    new (ClaimTypes.Role, "Demo"),                                    new (AppClaimTypes.Department, "HR"),                                    //new (AppClaimTypes.Admin, "false"),                                    new (AppClaimTypes.Manager, "true"),                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),                                };
                         return await Task.FromResult(claims);
-
                     }
-
-
 
                 default:
-
                     return [];
-
             }
-
-
-
         }
     }
 }
