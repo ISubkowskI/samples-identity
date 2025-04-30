@@ -105,20 +105,41 @@ namespace Ae.Sample.Identity.Services
                 // Info account
                 case "info@softaren.com":
                     {
-                        var claims = new List<Claim>                                {                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),                                    new (ClaimTypes.Role, "Demo"),                                    new (AppClaimTypes.Department, "HR"),                                    new (AppClaimTypes.Admin, "true"),                                    new (AppClaimTypes.Manager, "true"),                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),                                };
+                        var claims = new List<Claim>
+                                {
+                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
+                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
+                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
+                                    new (ClaimTypes.Role, "Demo"),
+                                    new (AppClaimTypes.Department, "HR"),
+                                    new (AppClaimTypes.Admin, "true"),
+                                    new (AppClaimTypes.Manager, "true"),
+                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
+                                };
                         return await Task.FromResult(claims);
                     }
 
                 // Notifications account
                 case "notifications@softaren.com":
                     {
-                        var claims = new List<Claim>                                {                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),                                    new (ClaimTypes.Role, "Demo"),                                    new (AppClaimTypes.Department, "HR"),                                    //new (AppClaimTypes.Admin, "false"),                                    new (AppClaimTypes.Manager, "true"),                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),                                };
+                        var claims = new List<Claim>
+                                {
+                                    new (ClaimTypes.Name, string.IsNullOrWhiteSpace(accountIdentity.DisplayName) ? accountIdentity.EmailAddress : accountIdentity.DisplayName),
+                                    new (ClaimTypes.NameIdentifier, $"{accountIdentity.Id}"),
+                                    new (ClaimTypes.Email, accountIdentity.EmailAddress),
+                                    new (ClaimTypes.Role, "Demo"),
+                                    new (AppClaimTypes.Department, "HR"),
+                                    //new (AppClaimTypes.Admin, "false"),
+                                    new (AppClaimTypes.Manager, "true"),
+                                    new (AppClaimTypes.EmploymentDate, accountIdentity.ToStringEmploymentDate()),
+                                };
                         return await Task.FromResult(claims);
                     }
 
                 default:
                     return [];
             }
-        }
+        }
+
     }
 }
