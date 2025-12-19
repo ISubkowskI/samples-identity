@@ -1,0 +1,13 @@
+
+# Valid for all projects
+**/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/*.*proj.user
+**/bin
+**/obj
+**/docker-compose*
+**/Dockerfile*
